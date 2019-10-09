@@ -4,8 +4,8 @@ const express = require('express'),
 
 app.use(express.json());
 
-app.get('/api/user', ctrl.getUsers);
-app.post('/api/user', ctrl.addUser);
+app.get('/api/users', ctrl.getUsers);
+app.post('/api/user', ctrl.postUser);
 app.put('/api/user/:id', ctrl.updateUser);
 app.delete('/api/user/:id', ctrl.deleteUser);
 
