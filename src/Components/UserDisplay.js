@@ -1,80 +1,84 @@
-import React, {Component} from 'react';
-import axios from 'axios';
-import UserList from './UserList';
+import React, { Component } from "react";
+import axios from "axios";
+import UserList from "./UserList";
 
 class UserDisplay extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            users: [{name: 'Matt'}, {name: 'Catie'}, {name: 'Tayte'}],
-            username: '',
-            edit: false
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      username: "",
+      edit: false
+    };
+  }
 
-    componentDidMount(){
-        axios.get('/api/users').then(res => {
-            this.setState({
-                users: res.data
-            })
-        })
-        .catch(err => console.log(err))
-    }
-
-    handleInput = (val) => {
+  componentDidMount() {
+    axios
+      .get("/api/users")
+      .then(res => {
         this.setState({
-            username: val
-        })
-    }
+          users: res.data
+        });
+      })
+      .catch(err => console.log(err));
+  }
 
-    addUser = () => {
-        const newUser = {
-            name: this.state.username
-        }
+  handleInput = val => {
+    this.setState({
+      username: val
+    });
+  };
 
-        axios.post('/api/user', newUser).then(res => {
-            this.setState({
-                users: res.data
-            })
-        })
-        .catch(err => console.log(err))
-    }
+  addUser = () => {
+    const newUser = {
+      name: this.state.username
+    };
 
-    updateUser = (data) => {
+    axios
+      .post("/api/user", newUser)
+      .then(res => {
         this.setState({
-            users: data
-        })
-    }
+          users: res.data
+        });
+      })
+      .catch(err => console.log(err));
+  };
 
-    deleteUser = (data) => {
-        this.setState({
-            users: data
-        })
-    }
+  updateUser = data => {
+    this.setState({
+      users: data
+    });
+  };
 
-    render(){
-        const mappedUsers = this.state.users.map((user, i) => {
-            return(
-                <UserList
-                    key={i}
-                    user={user}
-                    updateUser={this.updateUser}
-                    deleteUser={this.deleteUser} />
-            )
-        })
-        return(
-            <div>
-                <label>Add Username</label>
-                <input
-                    value={this.state.username}
-                    onChange={(e) => this.handleInput(e.target.value)}/>
-                <button onClick={this.addUser}>Submit</button>
-                <ul>
-                    {mappedUsers}
-                </ul>
-            </div>
-        )
-    }
-};
+  deleteUser = data => {
+    this.setState({
+      users: data
+    });
+  };
+
+  render() {
+    const mappedUsers = this.state.users.map((user, i) => {
+      return (
+        <UserList
+          key={i}
+          user={user}
+          updateUser={this.updateUser}
+          getUsers={this.getUsers}
+        />
+      );
+    });
+    return (
+      <div>
+        <label>Add Username</label>
+        <input
+          value={this.state.username}
+          onChange={e => this.handleInput(e.target.value)}
+        />
+        <button onClick={this.addUser}>Submit</button>
+        <ul>{mappedUsers}</ul>
+      </div>
+    );
+  }
+}
 
 export default UserDisplay;
